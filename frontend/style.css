@@ -1,0 +1,279 @@
+/* style.css */
+body{
+    font-family: 'Gilroy', Arial, "Helvetica Neue", sans-serif;
+    margin:0;
+    background: linear-gradient(to bottom, #0D1B2A, #1B263B);  /* Deep navy gradient */
+    color:#F2F2F2;  /* Off-white text */
+}
+
+/* --- Full-page container --- */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #0D1B2A, #1B263B);
+    font-family: 'Gilroy', Arial, sans-serif;
+}
+
+/* --- Form box container --- */
+.form-box {
+    width: 400px;
+    max-width: 90%;
+    background-color: #070f36;
+    padding: 50px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+/* --- Only one form visible at a time --- */
+#login-form, #register-form {
+    display: none;
+}
+
+/* --- Show login form by default --- */
+#login-form.active {
+    display: block;
+}
+
+/* --- Form headings --- */
+.form-box h2 {
+    color: #3ACFD5;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* --- Inputs --- */
+.form-box input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #3ACFD5;
+    background-color: #1B263B;
+    color: #E0E0E0;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.form-box input:focus {
+    border-color: #32C7D0;
+    box-shadow: 0 0 8px #32C7D0;
+}
+
+/* --- Buttons --- */
+.form-box button {
+    width: 100%;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #0D1B2A;
+    background-color: #3ACFD5;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.form-box button:hover {
+    background-color: #32C7D0;
+    transform: scale(0.98);
+}
+
+/* --- Toggle links --- */
+.toggle-text {
+    margin-top: 15px;
+    color: #E0E0E0;
+    font-size: 0.9rem;
+}
+
+.toggle-link {
+    color: #3ACFD5;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* --- Message paragraph --- */
+#message {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #fff;
+}
+
+#donate, #search, #profile{
+    display:none;
+    text-align: center;
+}
+
+/* NAVIGATION BAR */
+nav {
+    background-color: #070f36;  /* Deep navy */
+    display: flex;   
+    padding:2vh;     
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+.nav-buttons{
+      display:flex;
+      margin:0;
+      margin-right:10px;
+}
+
+nav h2 {
+    color: #F2F2F2;    /* Off-white */
+    margin:0;
+    margin-left:10px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+nav a {
+    display:inline-block;
+    color: #ffffff;     /* White links */
+    text-decoration: none;    
+    margin: 0px 10px;
+    font-weight: 700;
+    padding:5px;
+    font-size:1rem;
+    transition: transform 0.2s ease; 
+}
+
+nav a:hover {
+    color:#3ACFD5;      /* Soft cyan hover */
+    transform: scale(1.05);
+}
+
+/* HOME */
+.home-flex{
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+
+h1 {
+    color: #F2F2F2;     /* Off-white text */
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+}
+
+button {
+    background: #3ACFD5;   /* Soft cyan buttons */
+    border:none;
+    color: #0D1B2A;        /* Dark text for contrast */
+    padding: 15px 30px;
+    margin: 10px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.2s ease; 
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
+}
+
+button:hover{
+    background: #32C7D0;  /* Slightly darker cyan hover */
+    transform: scale(0.95);
+}   
+
+.food-grid{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap:40px;
+}
+
+.card{
+  text-align: center;
+  background-color: #070f36;
+  width:220px;
+  height: 300px;
+  /* background-color: #1B263B;  Slightly lighter than body for subtle contrast */
+}
+
+.card p{
+  color: #E0E0E0;   /* Light gray text inside card */
+} 
+
+.card h3{
+  color: #3ACFD5;   /* Soft cyan headings for readability */
+}
+
+.card img{
+    width: 220px;       
+    height: 180px;      
+    object-fit: cover;  
+    border-radius: 12px; 
+    transition: transform 0.2s ease; 
+    box-shadow: 0 6px 6px rgba(0,0,0,0.3);
+}
+
+.card img:hover{
+    transform: scale(0.95);
+}
+
+/* DONATIONS */
+
+.donate-flex{
+  display:flex;
+  flex-direction: column;
+  gap:20px;
+}
+
+
+.donate-flex div{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  width:300px;
+  margin:0px auto;             
+}
+
+.donate-flex label {
+  color: #F2F2F2;       /* Off-white text */
+  width: 120px;          
+  text-align: left;
+  font-weight: 600;
+}
+
+.donate-flex input {
+  background-color: #1B263B;   /* Slightly lighter card color */
+  border: 1px solid #3ACFD5;   /* Soft cyan border */
+  padding: 8px;
+  color: #E0E0E0;               /* Light gray input text */
+}
+
+.donate-flex input:focus {
+  border-color: #3ACFD5;   
+  outline-color: #3ACFD5;
+}
+
+/* SEARCH FEATURE */
+.search-bar input{
+  padding: 10px;
+  background-color: #1B263B;   /* Slightly lighter card color */
+  border: 1px solid #3ACFD5;   /* Soft cyan border */
+  color: #E0E0E0;               /* Light gray text */
+}
+
+.search-bar  input:focus {
+  border-color: #3ACFD5;  
+  outline-color: #3ACFD5;
+}
+
+.search-bar button{
+  background-color: #3ACFD5;   /* Soft cyan button */
+  color: #0D1B2A;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.search-bar button:hover{
+  background-color: #32C7D0;  /* Darker cyan hover */
+}

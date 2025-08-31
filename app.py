@@ -6,9 +6,12 @@ from flask import request
 import sqlite3
 from pathlib import Path
 from flask_cors import CORS
+import bcrypt
+import os
 
 app = Flask(__name__)   
 CORS(app)
+
 DB_PATH = Path(__file__).parent/"database.db" 
 
 def get_db_connection():
@@ -48,25 +51,29 @@ def donations():
         return jsonify(donationslist)
 
     if request.method == "POST":
-
-        data = request.get_json()  # 1. read JSON from frontend
+        data = request.get_json()
         food = data.get("food")
         quantity = data.get("quantity")
         location = data.get("location")
         user_id = data.get("user_id")
 
-        conn = get_db_connection()          # 2. open database
-        cur = conn.cursor()                 # 3. get cursor
+        conn = get_db_connection()
+        cur = conn.cursor()
 
-        cur.execute(
-            "INSERT INTO donations (food, quantity, location,user_id) VALUES (?, ?, ?,?)",
-            (food, quantity, location,user_id)
-        )                                   # 4. insert new donation
-        conn.commit()                        # 5. save changes
-        conn.close()                         # 6. close database
+        cur.execute("INSERT INTO donations(food,quantity,location,user_id) VALUES(?,?,?,?)",(food,quantity,location,user_id)) 
+        conn.commit()
+        new_id = cur.lastrowid
+        conn.close()
 
-        return jsonify({"donation": data, "message": "Donation added!", "redirect_url":"/"})
-    
+        return jsonify({
+            "message":"donation added!",
+            "donation":{
+                "food":food,
+                "quantity":quantity,
+                "location":location,
+                "id":new_id
+            }
+        }),201
 
 @app.route("/donations/<int:donation_id>",methods=["DELETE"])
 def deletedonations(donation_id):
@@ -129,24 +136,22 @@ def users() :
         data = request.get_json()
         username = data.get("username")
         email = data.get("email")
+        password = data.get("password")
+
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt())
 
         conn = get_db_connection()
         cur = conn.cursor()
         
-        cur.execute("SELECT id FROM users WHERE username = ?",(username,))
+        cur.execute("SELECT id FROM users WHERE username = ? OR email = ?", (username, email))
         if cur.fetchone():
             conn.close()
-            return jsonify({"error":"username already exists"})
-        
-        cur.execute("SELECT id FROM users WHERE email = ?",(email,))
-        if cur.fetchone():
-            conn.close()
-            return jsonify({"error":"email already exists"})
+            return jsonify({"error":"Username or email already exists"}), 409
 
-        cur.execute("INSERT INTO users (username, email) VALUES (?, ?)", (username, email))
+        cur.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", (username, email, hashed_password))
         conn.commit()
         conn.close()
-        return jsonify({"message": "user added", "data": {"username": username, "email": email}})
+        return jsonify({"message": "User registered successfully!", "data": {"username": username, "email": email}}), 201
         
 
 @app.route("/users/<int:user_id>",methods=["DELETE"])
@@ -181,6 +186,31 @@ def putusers(user_id):
         conn.close()
         return jsonify({"message":f"user with id {user_id} updated successfully!"}),200
 
-if __name__ == "__main__":   
-    app.run(debug=True)
+@app.route('/login', methods=["POST"])
+def login():
+
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT id,password from users WHERE username = ?",(username,))
+    user = cur.fetchone()
+
+    if not user:
+        conn.close()
+        return jsonify({"error": "Invalid username or password"}), 401
     
+    if bcrypt.checkpw(password.encode('utf-8'), user['password']):
+        conn.close()
+        return jsonify({"message": "Login successful!","user_id": user['id'],"username":username}), 200
+    else:
+        conn.close()
+        print("Login failed: Incorrect password")
+        return jsonify({"error": "Invalid username or password"}), 401
+    
+
+if __name__ == "__main__":
+    app.run(debug=True)
